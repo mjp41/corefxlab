@@ -6,25 +6,10 @@ using System.Runtime.CompilerServices;
 
 namespace System.Buffers
 {
-    public abstract class OwnedBuffer<T> : IDisposable, IRetainable
+    public abstract class OwnedBuffer<T> : BufferSource<T>, IDisposable, IRetainable
     {
         protected OwnedBuffer() { }
 
-        public abstract int Length { get; }
-
-        public abstract Span<T> AsSpan(int index, int length);
-
-        public virtual Span<T> AsSpan() => AsSpan(0, Length);
-
-        public Buffer<T> Buffer => new Buffer<T>(this, 0, Length);
-
-        public ReadOnlyBuffer<T> ReadOnlyBuffer => new ReadOnlyBuffer<T>(this, 0, Length);
-
-        public abstract BufferHandle Pin(int index = 0);
-
-        internal protected abstract bool TryGetArray(out ArraySegment<T> buffer);
-
-        #region Lifetime Management
         public abstract bool IsDisposed { get; }
 
         public void Dispose()
@@ -40,11 +25,18 @@ namespace System.Buffers
         public abstract void Retain();
 
         public abstract void Release();
-        #endregion
 
-        protected static unsafe void* Add(void* pointer, int offset)
+        // Default implementation so everything still works
+        protected internal override void ReleaseHandle()
         {
-            return (byte*)pointer + ((ulong)Unsafe.SizeOf<T>() * (ulong)offset);
+            Release();
+        }
+
+        // Default implementation so everything still works
+        public override BufferHandle RetainHandle()
+        {
+            Retain();
+            return new BufferHandle(this);
         }
     }
 }

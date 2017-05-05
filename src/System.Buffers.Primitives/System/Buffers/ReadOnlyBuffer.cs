@@ -12,11 +12,11 @@ namespace System.Buffers
     [DebuggerTypeProxy(typeof(ReadOnlyBufferDebuggerView<>))]
     public struct ReadOnlyBuffer<T> : IEquatable<ReadOnlyBuffer<T>>, IEquatable<Buffer<T>>
     {
-        readonly OwnedBuffer<T> _owner;
+        readonly BufferSource<T> _owner;
         readonly int _index;
         readonly int _length;
 
-        internal ReadOnlyBuffer(OwnedBuffer<T> owner,int index, int length)
+        internal ReadOnlyBuffer(BufferSource<T> owner,int index, int length)
         {
             _owner = owner;
             _index = index;
@@ -50,11 +50,7 @@ namespace System.Buffers
 
         public ReadOnlySpan<T> Span => _owner.AsSpan(_index, _length);
 
-        public BufferHandle Retain()
-        {
-            _owner.Retain();
-            return new BufferHandle(_owner);
-        }
+        public BufferHandle Retain() => _owner.RetainHandle();
 
         public BufferHandle Pin() => _owner.Pin(_index);
 

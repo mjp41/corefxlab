@@ -8,18 +8,18 @@ namespace System.Buffers
 {
     public unsafe struct BufferHandle : IDisposable
     {
-        IRetainable _owner;
+        BufferSource _owner;
         void* _pointer;
         GCHandle _handle;
 
-        public BufferHandle(IRetainable owner, void* pinnedPointer, GCHandle handle = default(GCHandle))
+        public BufferHandle(BufferSource owner, void* pinnedPointer, GCHandle handle = default(GCHandle))
         {
             _pointer = pinnedPointer;
             _handle = handle;
             _owner = owner;
         }
 
-        public BufferHandle(IRetainable owner) : this(owner, null) { }
+        public BufferHandle(BufferSource owner) : this(owner, null) { }
 
         public void* PinnedPointer {
             get {
@@ -35,7 +35,7 @@ namespace System.Buffers
             }
 
             if (_owner != null) {
-                _owner.Release();
+                _owner.ReleaseHandle();
                 _owner = null;
             }
 
