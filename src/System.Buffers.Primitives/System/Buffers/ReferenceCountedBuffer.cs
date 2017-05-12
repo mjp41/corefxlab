@@ -23,7 +23,6 @@ namespace System.Buffers
         {
             Debug.Assert(!IsDisposed);
             if (Interlocked.Decrement(ref _referenceCount) == 0) {
-                Debug.Assert(!IsRetained);
                 OnZeroReferences();
             }
         }
