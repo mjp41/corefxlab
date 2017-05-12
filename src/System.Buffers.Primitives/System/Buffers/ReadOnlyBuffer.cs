@@ -50,11 +50,7 @@ namespace System.Buffers
 
         public ReadOnlySpan<T> Span => _owner.AsSpan(_index, _length);
 
-        public BufferHandle Retain()
-        {
-            _owner.Retain();
-            return new BufferHandle(_owner);
-        }
+        public BufferHandle Retain() => _owner.GetHandle();
 
         public BufferHandle Pin() => _owner.Pin(_index);
 

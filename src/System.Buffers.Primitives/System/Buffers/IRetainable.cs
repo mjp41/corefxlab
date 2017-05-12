@@ -5,8 +5,6 @@ namespace System.Buffers
 {
     public interface IRetainable
     {
-        void Retain();
-        void Release();
-        bool IsRetained { get; }
+        void ReleaseHandle();
     }
 }

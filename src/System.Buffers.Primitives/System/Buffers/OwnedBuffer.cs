@@ -22,6 +22,17 @@ namespace System.Buffers
 
         public abstract BufferHandle Pin(int index = 0);
 
+        public virtual BufferHandle GetHandle()
+        {
+            Retain();
+            return new BufferHandle(this);
+        }
+
+        public virtual void ReleaseHandle()
+        {
+            Release();
+        }
+
         internal protected abstract bool TryGetArray(out ArraySegment<T> buffer);
 
         #region Lifetime Management

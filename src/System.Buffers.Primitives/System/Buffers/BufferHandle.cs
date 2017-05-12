@@ -36,7 +36,7 @@ namespace System.Buffers
             }
 
             if (_owner != null) {
-                _owner.Release();
+                _owner.ReleaseHandle();
                 _owner = null;
             }
 
