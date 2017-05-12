@@ -63,7 +63,7 @@ namespace System.Buffers
             return new Span<T>(_array).Slice(index, length);
         }
 
-        public override void OnZeroReferences()
+        protected override void OnZeroReferences()
         {
             DelayedDisposer.Add(this);
         }
