@@ -63,6 +63,11 @@ namespace System.Buffers
             return new Span<T>(_array).Slice(index, length);
         }
 
+        public override void OnZeroReferences()
+        {
+            DelayedDisposer.Add(this);
+        }
+
         public override bool IsRetained => base.IsRetained || ReferenceCounter.HasReference(this);
     }
 }
